@@ -43,7 +43,7 @@ module Resque
       Resque.validate(klass, queue)
 
       if Resque.inline?
-        constantize(klass).perform(*decode(encode(args)))
+        Job.new(:inline, { :class => klass.to_s, :args => args }).perform
       else
         Resque.push(queue, :class => klass.to_s, :args => args)
       end
